@@ -303,7 +303,7 @@
         for (let recipe of recipes) {
             let recipeTemplate = document.getElementById('recipe-template').innerHTML;
             recipeTemplate = recipeTemplate.replaceAll('{RECIPE_TITLE}', recipe.name);
-            recipeTemplate = recipeTemplate.replaceAll('{RECIPE_FILEPATH}', getRootPath() + recipe.path);
+            recipeTemplate = recipeTemplate.replaceAll('{RECIPE_FILEPATH}', recipe.path);
             items += recipeTemplate;
             // console.log(`path: ${recipe.titel} ${recipe.Path}`);
         }
@@ -347,11 +347,6 @@
             console.error('Error fetching or processing JSON:', error);
         }
     }
-
-    function getRootPath() {
-        return window.location.href;
-    }
-
 
 
     // function normalizeString(str) {
