@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kochbuch</title>
+    <link rel="stylesheet" href="./app.css" />
+</head>
+
+<body>
+    <div class="main" id="main">
+
+        <div class="page" id="recipePage" style="display:none;"></div>
+
+        <!-- Category overview page -->
+        <div class="page" id="categoryOverviewPage" style="display:none;">
+            <div class="navbar background">
+                <div class="titleField">
+                    <div class="title">Resi's Ideenbuch</div>
+                </div>
+            </div>
+            <div class="flexTileField" id="categoryOverviewPageFlex">
+                {CATEGORY_OVERVIEW_PAGE_ITEMS}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- categoryOverviewPageItem -->
+    <template id="categoryOverviewPageItem-template">
+        <div class="flexTileItem">
+            <div class="recipeTile background" onClick='enableCategoryPage("{CATEGORY_TITLE}")'>
+                <div class="doublePicture">
+                    <img class="image" src="{RECIPE_FILEPATH1}" />
+                    <img class="image" src="{RECIPE_FILEPATH2}" />
+                </div>
+                <div class="titleField">
+                    <div class="title">{CATEGORY_TITLE}</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Detail Recipe page -->
+    <template id="recipePage-template">
+        <div class="navbar background">
+            <div class="horizontalList">
+                <div class="horizontalListItem clickable" onclick='closeRecipe("{CATEGORY_TITLE}","{RECIPE_TITLE}")'>
+                    <div class="title">&lt;</div>
+                </div>
+                <div class="horizontalListItem">
+                    <div class="title">{RECIPE_TITLE}</div>
+                </div>
+                <div class="horizontalListItem"></div>
+            </div>
+        </div>
+        <div class="flexTileField">
+            <div class="flexTileItem">
+                <div class="recipeTile background">
+                    <img class="image" src="{RECIPE_FILEPATH}" />
+                </div>
+            </div>
+            <div class="flexTileItem">
+                <div class="recipeTile background">
+                    <div class="titleField">
+                        <div class="title">Zutaten</div>
+                    </div>
+                    <div class="recipeTileText">
+                        {RECIPE_INGREDIENTS}
+                    </div>
+                </div>
+            </div>
+            <div class="flexTileItem">
+                <div class="recipeTile background">
+                    <div class="titleField">
+                        <div class="title">Zubereitung</div>
+                    </div>
+                    <div class="recipeTileText">
+                        {RECIPE_PREPARATION}
+                    </div>
+                </div>
+            </div>
+            <div class="flexTileItem" id="tip">
+                <div class="recipeTile background">
+                    <div class="titleField">
+                        <div class="title">Tipp</div>
+                    </div>
+                    <div class="recipeTileText">
+                        {RECIPE_TIP}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template 1: Category Page -->
+    <template id="category-template">
+        <div class="page" id="category-{CATEGORY_TITLE}" style="display:none;">
+            <div class="navbar background">
+                <div class="horizontalList">
+                    <div class="horizontalListItem clickable" id="leftArrow-{CATEGORY_TITLE}"
+                        onclick='enablePreviousCategory("{CATEGORY_TITLE}")'>
+                        <div class="title">&lt;</div>
+                    </div>
+                    <div class="horizontalListItem clickable" onclick='enableOverviewPage()'>
+                        <div class="title">{CATEGORY_TITLE}</div>
+                    </div>
+                    <div class="horizontalListItem clickable" id="rightArrow-{CATEGORY_TITLE}"
+                        onclick='enableNextCategory("{CATEGORY_TITLE}")'>
+                        <div class="title">&gt;</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flexTileField">
+                {RECIPE_ITEMS}
+            </div>
+        </div>
+    </template>
+
+    <!-- Template 2: Recipe Item -->
+    <template id="recipe-template">
+        <div class="flexTileItem">
+            <div class="recipeTile background" onclick='openRecipe("{CATEGORY_TITLE}", "{RECIPE_TITLE}")'>
+                <img class="image" src="{RECIPE_FILEPATH}" />
+                <div class="titleField">
+                    <div class="title">{RECIPE_TITLE}</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', startApp);
+
+    var jsonObject;
+
+    async function startApp() {
+        await fetchJsonFile();
+        generateCategoryPages();
+        generateOverviewPage();
+
+        enableCategoryPage("Aus dem Topf");
+        enableOverviewPage();
+    }
+
+    function enableCategoryPage(categoryName) {
+        const categoryDiv = document.getElementById(`category-${categoryName}`);
+        if (categoryDiv) {
+            disableAll();
+            categoryDiv.style.display = 'block';
+            window.scrollTo(0, 0);
+        } else {
+            console.error(`div for category ${categoryName} not found.`);
+        }
+    }
+
+    function enablePreviousCategory(categoryNameInput) {
+        let previousCatergoryName = "";
+        let catergoryNameLastIteration = "";
+        for (let category of jsonObject) {
+            if (category.name === categoryNameInput) {
+                previousCatergoryName = catergoryNameLastIteration;
+            }
+            catergoryNameLastIteration = category.name;
+        }
+        if (previousCatergoryName != "") {
+            enableCategoryPage(previousCatergoryName);
+        }
+    }
+
+    function enableNextCategory(categoryNameInput) {
+        let nextCatergoryName = "";
+        let catergoryNameLastIteration = "";
+        for (let category of jsonObject) {
+            if (catergoryNameLastIteration === categoryNameInput) {
+                nextCatergoryName = category.name;
+            }
+            catergoryNameLastIteration = category.name;
+        }
+        if (nextCatergoryName != "") {
+            enableCategoryPage(nextCatergoryName);
+        }
+    }
+
+    function enableOverviewPage() {
+        const page = document.getElementById(`categoryOverviewPage`);
+        disableAll();
+        page.style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function openRecipe(categoryName, recipeName) {
+        // console.log(`path: ${categoryName} ${recipeName}`);
+        // console.log(`scrollY: ${window.scrollY}`);
+        sessionStorage.setItem('scrollpos', window.scrollY);
+        window.scrollTo(0, 0);
+        disableAll();
+        recipe = findRecipeByTitle(recipeName);
+        category = findCategoryByTitle(categoryName);
+
+        // \r\n and [p] replace
+        recipe.ingredients = recipeStringManipulation(recipe.ingredients);
+        recipe.preparation = recipeStringManipulation(recipe.preparation);
+        recipe.tip = recipeStringManipulation(recipe.tip);
+
+        template = document.getElementById('recipePage-template').innerHTML;
+        template = template.replaceAll('{CATEGORY_TITLE}', categoryName);
+        template = template.replaceAll('{RECIPE_TITLE}', recipeName);
+        template = template.replaceAll('{RECIPE_FILEPATH}', recipe.path);
+        template = template.replaceAll('{RECIPE_INGREDIENTS}', recipe.ingredients);
+        template = template.replaceAll('{RECIPE_PREPARATION}', recipe.preparation);
+        template = template.replaceAll('{RECIPE_TIP}', recipe.tip);
+        recipePage.innerHTML = template;
+        setBackground(recipePage, category.backgroundColor);
+
+        //disable tip if empty
+        if (recipe.tip.length < 5) {
+            document.getElementById(`tip`).style.display = "none";
+        } else {
+            document.getElementById(`tip`).style.display = "block";
+        }
+
+        recipePage.style.display = 'block'
+    }
+
+    function closeRecipe(categoryName, recipeName) {
+        enableCategoryPage(categoryName);
+        var scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) {
+            window.scrollTo(0, scrollpos);
+            sessionStorage.removeItem('scrollpos');
+        }
+    }
+
+    function disableAll() {
+        const pages = document.getElementsByClassName("page");
+        for (let page of pages) {
+            page.style.display = 'none';
+        }
+    }
+
+    function findRecipeByTitle(recipeTitle) {
+        for (let category of jsonObject) {
+            for (let recipe of category.recipes) {
+                if (recipe.name === recipeTitle) {
+                    return recipe;
+                }
+            }
+        }
+        return null; // Recipe not found
+    }
+
+    function findCategoryByTitle(categoryTitle) {
+        for (let category of jsonObject) {
+            if (category.name === categoryTitle) {
+                return category;
+            }
+        }
+        return null; // Recipe not found
+    }
+
+
+    // ----------------------------------- page generation --------------------------------
+    function generateCategoryPages() {
+        for (let category of jsonObject) {
+            let categoryPageContent = getCategoryPageContent(category.name, category.recipes);
+            page = appendHTMLToMain(categoryPageContent);
+            setBackground(page, category.backgroundColor);
+        }
+        document.getElementById("leftArrow-" + jsonObject[0].name).innerHTML = "";
+        document.getElementById("leftArrow-" + jsonObject[0].name).classList.remove('clickable');
+        document.getElementById("rightArrow-" + jsonObject[jsonObject.length - 1].name).innerHTML = "";
+        document.getElementById("rightArrow-" + jsonObject[jsonObject.length - 1].name).classList.remove('clickable');
+    }
+
+    function generateOverviewPage() {
+        let htmlString = "";
+        let template = document.getElementById('categoryOverviewPageItem-template').innerHTML;
+        for (let category of jsonObject) {
+            categoryString = template.replaceAll('{CATEGORY_TITLE}', category.name);
+            categoryString = categoryString.replaceAll('{RECIPE_FILEPATH1}', category.recipes[0].path);
+            if (category.recipes[1]) {
+                categoryString = categoryString.replaceAll('{RECIPE_FILEPATH2}', category.recipes[1].path);
+            }
+            htmlString = htmlString + categoryString;
+        }
+        document.getElementById('categoryOverviewPage').innerHTML = document.getElementById('categoryOverviewPage').innerHTML.replace("{CATEGORY_OVERVIEW_PAGE_ITEMS}", htmlString);
+    }
+
+    function getCategoryPageContent(categoryName, recipes) {
+        // Load the category template and replace placeholders with actual data
+        let categoryTemplate = document.getElementById('category-template').innerHTML;
+        categoryTemplate = categoryTemplate.replaceAll('{RECIPE_ITEMS}', generateRecipeItems(recipes));
+        categoryTemplate = categoryTemplate.replaceAll('{CATEGORY_TITLE}', categoryName);
+        return categoryTemplate;
+    }
+
+    function generateRecipeItems(recipes) {
+        let items = '';
+        for (let recipe of recipes) {
+            let recipeTemplate = document.getElementById('recipe-template').innerHTML;
+            recipeTemplate = recipeTemplate.replaceAll('{RECIPE_TITLE}', recipe.name);
+            recipeTemplate = recipeTemplate.replaceAll('{RECIPE_FILEPATH}', recipe.path);
+            items += recipeTemplate;
+            // console.log(`path: ${recipe.titel} ${recipe.Path}`);
+        }
+        return items;
+    }
+
+    function setBackground(page, background) {
+        if (page) {
+            for (let backgroundDiv of page.getElementsByClassName("background")) {
+                backgroundDiv.style.backgroundColor = background;
+            }
+        } else {
+            console.error(`div for category ${categoryName} not found.`);
+        }
+    }
+
+    function recipeStringManipulation(string) {
+        string = string.trim();
+        string = string.replaceAll("\r\n", "<br>");
+        // list items
+        if (string.includes("[p]")) {
+            string = string.replace("[p]", "<li>");
+            string = string.replaceAll("[p]", "</li><li>");
+            string = "<ul>" + string + "</li></ul>";
+        }
+        return string;
+    }
+
+    function appendHTMLToMain(html) {
+        let div = document.createElement('div');
+        div.innerHTML = html;
+        return document.getElementById('main').appendChild(div.children[0]);
+    }
+
+    async function fetchJsonFile() {
+        try {
+            let fetchedData = await fetch('./recipeData.json');
+            jsonObject = await fetchedData.json();
+            //console.log(jsonObject);
+        } catch (error) {
+            console.error('Error fetching or processing JSON:', error);
+        }
+    }
+
+
+
+    // function normalizeString(str) {
+    //     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // }
+</script>
+
+
+</html>
