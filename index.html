@@ -214,7 +214,8 @@
         template = template.replaceAll('{RECIPE_PREPARATION}', recipe.preparation);
         template = template.replaceAll('{RECIPE_TIP}', recipe.tip);
         recipePage.innerHTML = template;
-        setBackground(recipePage, category.backgroundColor);
+        setBackgroundColor(recipePage, category.backgroundColor);
+        setTextColor(recipePage, category.backgroundColor);
 
         //disable tip if empty
         if (recipe.tip.length < 5) {
@@ -268,7 +269,8 @@
         for (let category of jsonObject) {
             let categoryPageContent = getCategoryPageContent(category.name, category.recipes);
             page = appendHTMLToMain(categoryPageContent);
-            setBackground(page, category.backgroundColor);
+            setBackgroundColor(page, category.backgroundColor);
+            setTextColor(page, category.backgroundColor);
         }
         document.getElementById("leftArrow-" + jsonObject[0].name).innerHTML = "";
         document.getElementById("leftArrow-" + jsonObject[0].name).classList.remove('clickable');
@@ -310,10 +312,24 @@
         return items;
     }
 
-    function setBackground(page, background) {
+    function setBackgroundColor(page, color) {
         if (page) {
             for (let backgroundDiv of page.getElementsByClassName("background")) {
-                backgroundDiv.style.backgroundColor = background;
+                backgroundDiv.style.backgroundColor = color;
+            }
+        } else {
+            console.error(`div for category ${categoryName} not found.`);
+        }
+    }
+
+    function setTextColor(page, backgroundColor) {
+        if (page) {
+            textColor = getTextColorBasedOnBackgroundColor(backgroundColor);
+            for (let textDiv of page.getElementsByClassName("title")) {
+                textDiv.style.color = textColor;
+            }
+            for (let textDiv of page.getElementsByClassName("recipeTileText")) {
+                textDiv.style.color = textColor;
             }
         } else {
             console.error(`div for category ${categoryName} not found.`);
@@ -345,6 +361,38 @@
             //console.log(jsonObject);
         } catch (error) {
             console.error('Error fetching or processing JSON:', error);
+        }
+    }
+
+    function getTextColorBasedOnBackgroundColor(backgroundColor) {
+        // Function to convert color name to hex value
+        function nameToHex(color) {
+            const ctx = document.createElement('canvas').getContext('2d');
+            ctx.fillStyle = color;
+            return ctx.fillStyle;
+        }
+
+        // Check if the backgroundColor is a color name
+        if (backgroundColor.match(/^[a-zA-Z]+$/)) {
+            backgroundColor = nameToHex(backgroundColor);
+        }
+
+        // Convert the background color to RGB format
+        backgroundColor = backgroundColor.substring(1); // Remove the '#' at the beginning
+        const r = parseInt(backgroundColor.slice(0, 2), 16);
+        const g = parseInt(backgroundColor.slice(2, 4), 16);
+        const b = parseInt(backgroundColor.slice(4, 6), 16);
+
+        // Calculate the relative luminance (brightness) of the background color
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+        // Determine the best text color based on the luminance
+        if (luminance > 0.5) {
+            // Use black text for light background colors
+            return "#000000"; // Black
+        } else {
+            // Use white text for dark background colors
+            return "#FFFFFF"; // White
         }
     }
 
