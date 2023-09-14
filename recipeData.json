@@ -1,7 +1,7 @@
 [
     {
         "name": "Aufstriche und Salate",
-        "backgroundColor": "#e2c106",
+        "backgroundColor": "gold",
         "recipes": [
             {
                 "name": "Avocado mit Mango ",
@@ -195,8 +195,8 @@
         ]
     },
     {
-        "name": "Suppen und EintÃ¶pfe",
-        "backgroundColor": "#e2c106",
+        "name": "Suppen und Eintöpfe",
+        "backgroundColor": "tomato",
         "recipes": [
             {
                 "name": "Chili sin Carne",
@@ -321,7 +321,7 @@
     },
     {
         "name": "Aus dem Topf",
-        "backgroundColor": "#e2c106",
+        "backgroundColor": "dodgerblue",
         "recipes": [
             {
                 "name": "Dörrtomaten-Risotto mit Oliven für 2. Pers",
@@ -397,7 +397,7 @@
     },
     {
         "name": "Aus der Pfanne",
-        "backgroundColor": "#e2c106",
+        "backgroundColor": "forestgreen",
         "recipes": [
             {
                 "name": "Asia-Nudeln",
@@ -543,7 +543,7 @@
     },
     {
         "name": "Aus dem Backrohr",
-        "backgroundColor": "#e2c106",
+        "backgroundColor": "lightslategray",
         "recipes": [
             {
                 "name": "Auberginen mit Kichererbsen",
@@ -661,7 +661,7 @@
     },
     {
         "name": "Süßspeisen",
-        "backgroundColor": "#e2c106",
+        "backgroundColor": "mediumvioletred",
         "recipes": [
             {
                 "name": "Buchteln",
