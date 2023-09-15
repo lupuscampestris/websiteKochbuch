@@ -92,6 +92,7 @@
 }
 
 .doublePicture {
+    width: 100%;
     display: flex;
 }
 
