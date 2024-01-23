@@ -1,9 +1,42 @@
-Set oShell = WScript.CreateObject("WScript.Shell")
+
+Dim objShell
+Set objShell = WScript.CreateObject("WScript.Shell")
+
+' Change to the directory of your Git repository
+'Dim repoPath
+'repoPath = "C:\path\to\your\git\repository"
+'objShell.CurrentDirectory = repoPath
 
 
-oShell.Run "git add -A", 0, 1 'hidden, wait
+Dim gitCommand
+Dim cmd, output
+' Git commit command
+gitCommand = "git add -A "
+' Run the Git command and display the output in the command window
+WScript.Echo gitCommand
+Set cmd = objShell.Exec(gitCommand)
+Do While Not cmd.StdOut.AtEndOfStream
+    output = cmd.StdOut.ReadLine()
+    WScript.Echo output
+Loop
 
-strRun = "git commit -m " & """" & Date &"""" 
-oShell.Run strRun, 0, 1 'hidden, wait
+' Git commit command
 
-'oShell.Run "git push", 0, 1 'hidden, wait
+gitCommand = "git commit -m " & """" & Date &""""
+' Run the Git command and display the output in the command window
+WScript.Echo gitCommand
+Set cmd = objShell.Exec(gitCommand)
+Do While Not cmd.StdOut.AtEndOfStream
+    output = cmd.StdOut.ReadLine()
+    WScript.Echo output
+Loop
+
+' Git commit command
+gitCommand = "git push"
+' Run the Git command and display the output in the command window
+WScript.Echo gitCommand
+Set cmd = objShell.Exec(gitCommand)
+Do While Not cmd.StdOut.AtEndOfStream
+    output = cmd.StdOut.ReadLine()
+    WScript.Echo output
+Loop

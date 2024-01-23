@@ -1,0 +1,2 @@
+cscript pushGithub.vbs
+pause
