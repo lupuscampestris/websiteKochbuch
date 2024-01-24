@@ -103,7 +103,7 @@
                         onclick='enablePreviousCategory("{CATEGORY_TITLE}")'>
                         <div class="title">&lt;</div>
                     </div>
-                    <div class="horizontalListItem clickable" onclick='enableOverviewPage()'>
+                    <div class="horizontalListItem clickable" onclick='enableOverviewPage(true)'>
                         <div class="title">{CATEGORY_TITLE}</div>
                     </div>
                     <div class="horizontalListItem clickable" id="rightArrow-{CATEGORY_TITLE}"
@@ -143,21 +143,24 @@
                 enableCategoryPage(event.state.name, false);
                 var scrollpos = sessionStorage.getItem('scrollpos');
                 if (scrollpos) {
-                    console.log("scrollpos:" + scrollpos);
                     window.scrollTo(0, scrollpos);
                     setTimeout(function () {
                         window.scrollTo(0, scrollpos); // Replace with your desired coordinates
                     }, 0);
                     sessionStorage.removeItem('scrollpos');
+                } else {
+                    window.scrollTo(0, 0);
                 }
-                window.scrollTo(0, 1000);
             }
             if (event.state.type == "recipe") {
                 openRecipe(event.state.category, event.state.name, false);
             }
+            if (event.state.type == "overview") {
+                enableOverviewPage(false);
+            }
         } else {
             // Handle the initial page load
-            enableOverviewPage();
+            enableOverviewPage(false);
         }
     };
 
@@ -168,8 +171,8 @@
         generateCategoryPages();
         generateOverviewPage();
 
-        enableCategoryPage("Aus dem Topf", false);
-        enableOverviewPage();
+        // enableCategoryPage("Aus dem Topf", false);
+        enableOverviewPage(true);
     }
 
     function enableCategoryPage(categoryName, pushHistory) {
@@ -216,16 +219,18 @@
         }
     }
 
-    function enableOverviewPage() {
+    function enableOverviewPage(pushHistory) {
         const page = document.getElementById(`categoryOverviewPage`);
         disableAll();
         page.style.display = 'block';
         window.scrollTo(0, 0);
+        if (pushHistory) {
+            history.pushState({ type: "overview" }, "", "");
+        }
     }
 
     function openRecipe(categoryName, recipeName, pushHistory) {
         // console.log(`path: ${categoryName} ${recipeName}`);
-        console.log(`scrollY: ${window.scrollY}`);
         sessionStorage.setItem('scrollpos', window.scrollY);
         window.scrollTo(0, 0);
         disableAll();
@@ -267,7 +272,6 @@
         enableCategoryPage(categoryName, true);
         var scrollpos = sessionStorage.getItem('scrollpos');
         if (scrollpos) {
-            console.log("scrollpos:" + scrollpos);
             window.scrollTo(0, scrollpos);
             sessionStorage.removeItem('scrollpos');
         }
