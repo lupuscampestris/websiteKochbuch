@@ -30,7 +30,7 @@
     <!-- categoryOverviewPageItem -->
     <template id="categoryOverviewPageItem-template">
         <div class="flexTileItem">
-            <div class="recipeTile background" onClick='enableCategoryPage("{CATEGORY_TITLE}")'>
+            <div class="recipeTile background" onClick='enableCategoryPage("{CATEGORY_TITLE}",true)'>
                 <div class="doublePicture">
                     <img class="image halfWidth" src="{RECIPE_FILEPATH1}" />
                     <img class="image halfWidth" src="{RECIPE_FILEPATH2}" />
@@ -121,7 +121,7 @@
     <!-- Template 2: Recipe Item -->
     <template id="recipe-template">
         <div class="flexTileItem">
-            <div class="recipeTile background" onclick='openRecipe("{CATEGORY_TITLE}", "{RECIPE_TITLE}")'>
+            <div class="recipeTile background" onclick='openRecipe("{CATEGORY_TITLE}", "{RECIPE_TITLE}", true)'>
                 <img class="image" src="{RECIPE_FILEPATH}" />
                 <div class="titleField">
                     <div class="title">{RECIPE_TITLE}</div>
@@ -135,6 +135,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', startApp);
 
+    window.onpopstate = function (event) {
+        if (event.state && event.state.type) {
+            console.log("retrieving eventstatetype: " + event.state.type + ", eventstatename: " + event.state.name);
+            // When the user navigates back/forward, show the corresponding page
+            if (event.state.type == "category") {
+                enableCategoryPage(event.state.name, false);
+                var scrollpos = sessionStorage.getItem('scrollpos');
+                if (scrollpos) {
+                    console.log("scrollpos:" + scrollpos);
+                    window.scrollTo(0, scrollpos);
+                    setTimeout(function () {
+                        window.scrollTo(0, scrollpos); // Replace with your desired coordinates
+                    }, 0);
+                    sessionStorage.removeItem('scrollpos');
+                }
+                window.scrollTo(0, 1000);
+            }
+            if (event.state.type == "recipe") {
+                openRecipe(event.state.category, event.state.name, false);
+            }
+        } else {
+            // Handle the initial page load
+            enableOverviewPage();
+        }
+    };
+
     var jsonObject;
 
     async function startApp() {
@@ -142,16 +168,21 @@
         generateCategoryPages();
         generateOverviewPage();
 
-        enableCategoryPage("Aus dem Topf");
+        enableCategoryPage("Aus dem Topf", false);
         enableOverviewPage();
     }
 
-    function enableCategoryPage(categoryName) {
+    function enableCategoryPage(categoryName, pushHistory) {
         const categoryDiv = document.getElementById(`category-${categoryName}`);
         if (categoryDiv) {
             disableAll();
             categoryDiv.style.display = 'block';
-            window.scrollTo(0, 0);
+            if (pushHistory) {
+                // window.scrollTo(0, 0);
+                // sessionStorage.setItem('scrollpos', window.scrollY);
+                history.pushState({ type: "category", name: categoryName }, "", "");
+                console.log("State: eventstatetype: " + "category" + ", eventstatename: " + categoryName);
+            }
         } else {
             console.error(`div for category ${categoryName} not found.`);
         }
@@ -167,7 +198,7 @@
             catergoryNameLastIteration = category.name;
         }
         if (previousCatergoryName != "") {
-            enableCategoryPage(previousCatergoryName);
+            enableCategoryPage(previousCatergoryName, true);
         }
     }
 
@@ -181,7 +212,7 @@
             catergoryNameLastIteration = category.name;
         }
         if (nextCatergoryName != "") {
-            enableCategoryPage(nextCatergoryName);
+            enableCategoryPage(nextCatergoryName, true);
         }
     }
 
@@ -192,9 +223,9 @@
         window.scrollTo(0, 0);
     }
 
-    function openRecipe(categoryName, recipeName) {
+    function openRecipe(categoryName, recipeName, pushHistory) {
         // console.log(`path: ${categoryName} ${recipeName}`);
-        // console.log(`scrollY: ${window.scrollY}`);
+        console.log(`scrollY: ${window.scrollY}`);
         sessionStorage.setItem('scrollpos', window.scrollY);
         window.scrollTo(0, 0);
         disableAll();
@@ -225,12 +256,18 @@
         }
 
         recipePage.style.display = 'block'
+
+        if (pushHistory) {
+            history.pushState({ type: "recipe", category: categoryName, name: recipeName }, "", "");
+            console.log("State: eventstatetype: " + "recipe" + ", eventstatename: " + recipeName);
+        }
     }
 
     function closeRecipe(categoryName, recipeName) {
-        enableCategoryPage(categoryName);
+        enableCategoryPage(categoryName, true);
         var scrollpos = sessionStorage.getItem('scrollpos');
         if (scrollpos) {
+            console.log("scrollpos:" + scrollpos);
             window.scrollTo(0, scrollpos);
             sessionStorage.removeItem('scrollpos');
         }
