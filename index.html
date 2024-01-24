@@ -201,7 +201,8 @@
             catergoryNameLastIteration = category.name;
         }
         if (previousCatergoryName != "") {
-            enableCategoryPage(previousCatergoryName, true);
+            enableCategoryPage(previousCatergoryName, false);
+            history.replaceState({ type: "category", name: previousCatergoryName }, "", "");
         }
     }
 
@@ -215,7 +216,8 @@
             catergoryNameLastIteration = category.name;
         }
         if (nextCatergoryName != "") {
-            enableCategoryPage(nextCatergoryName, true);
+            enableCategoryPage(nextCatergoryName, false);
+            history.replaceState({ type: "category", name: nextCatergoryName }, "", "");
         }
     }
 
@@ -269,12 +271,13 @@
     }
 
     function closeRecipe(categoryName, recipeName) {
-        enableCategoryPage(categoryName, true);
-        var scrollpos = sessionStorage.getItem('scrollpos');
-        if (scrollpos) {
-            window.scrollTo(0, scrollpos);
-            sessionStorage.removeItem('scrollpos');
-        }
+        history.back();
+        // enableCategoryPage(categoryName, true);
+        // var scrollpos = sessionStorage.getItem('scrollpos');
+        // if (scrollpos) {
+        //     window.scrollTo(0, scrollpos);
+        //     sessionStorage.removeItem('scrollpos');
+        // }
     }
 
     function disableAll() {
