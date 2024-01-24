@@ -178,7 +178,7 @@
             disableAll();
             categoryDiv.style.display = 'block';
             if (pushHistory) {
-                // window.scrollTo(0, 0);
+                window.scrollTo(0, 0);
                 // sessionStorage.setItem('scrollpos', window.scrollY);
                 history.pushState({ type: "category", name: categoryName }, "", "");
                 console.log("State: eventstatetype: " + "category" + ", eventstatename: " + categoryName);
