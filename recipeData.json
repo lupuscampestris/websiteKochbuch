@@ -1,7 +1,7 @@
 ﻿[
 {
 "name":"Aufstriche und Salate",
-"backgroundColor":"#f5b83b",
+"backgroundColor":"#f5b83a",
 "recipes": [
 {"name": "Auberginen-Paprika-Aufstrich","ingredients": "Ein Blitz-Rezept\r\n\r\n1 Aubergine\r\n½  roter Paprika\r\n½ Zitrone (Saft)\r\nOlivenöl\r\nSalz oder Rauchsalz\r\nChili\r\n\r\n","preparation": "[p]Aubergine in 1 cm dicke Scheiben schneiden, ohne Öl im Plattengrill grillen. Ebenso den Paprika. Beides sollte weich sein und etwas Farbe haben.\r\n[p]Den Paprika häuten.\r\n[p]Alle Zutaten zusammen pürieren und abschmecken.\r\n\r\n\r\n","tip": "Tipp: Das Rauchsalz verstärkt den Grillgeschmack.","path": "recipe_data\\01 Aufstriche und Salate\\Auberginen-Paprika-Aufstrich\\foto_c2.jpg"},
 {"name": "Avocado mit Mango ","ingredients": "Für 4 Personen als Vorspeise\r\n\r\n2 reife Avocados \r\n1 reife Mango\r\nfrisches Basilikum\r\nRucola\r\n\r\nMarinade:\r\n3 EL Olivenöl\r\n1 EL Balsamico Essig\r\n1 EL Zitronensaft\r\nSalz, Chili \r\n\r\n\r\n\r\n\r\n","preparation": "[p]Mango und Avocado in Stücke schneiden. Basilikum grob schneiden.\r\n[p]Marinade anrühren und vorsichtig mit dem Obst vermengen.\r\n[p]Auf Rucola in Gläsern anrichten.\r\n\r\n\r\n\r\n\r\n","tip": "pp: Die Früchte erst kurz vor dem Servieren marinieren, da sie sonst aufweichen und sich der Geschmack zu sehr vermischt.   \r\n","path": "recipe_data\\01 Aufstriche und Salate\\Avocado mit Mango\\foto_c2.jpg"},
