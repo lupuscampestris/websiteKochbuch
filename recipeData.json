@@ -1,11 +1,5 @@
 ﻿[
 {
-"name":"Einleitung",
-"backgroundColor":"#4968bc",
-"recipes": [
-{"name": "Einleitung","ingredients": " V   =   Vegane Rezepte\r\n \r\n \r\nVm   =   Vegan-möglich\r\nVegetarische Rezepte zum Abwandeln auf  \r\nVegan durch Ersetzen der Milchprodukte mit  \r\npflanzlichen Alternativen:\r\n \r\nButter durch vegane Margarine\r\nMilch durch Soja, Hafer, Mandel-Drink\r\nJoghurt durch Soja, Hafer, Mandel Produkte usw.\r\n","preparation": "[p]\r\n\r\n","tip": "","path": "recipe_data\\00 Einleitung\\Einleitung\\foto_c2.jpg"}
-]},
-{
 "name":"Suppen und Eintöpfe",
 "backgroundColor":"#e44f38",
 "recipes": [
