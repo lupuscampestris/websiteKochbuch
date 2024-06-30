@@ -1,5 +1,12 @@
 ﻿[
 {
+"name":"Einleitung",
+"backgroundColor":"#4968bc",
+"recipes": [
+{"name": "In dieser Küche wird leidenschaftlich experimentiert!","ingredients": "mit\r\nregionalen\r\nsaisonalen\r\nbiologischen\r\npflanzlichen\r\nLebensmitteln\r\n\r\n","preparation": "[p]Weil uns die Natur das Beste bietet,\r\nwas der Mensch zum Leben braucht.\r\n\r\n","tip": "","path": "recipe_data\\00 Einleitung\\Einleitung\\foto_c2.jpg"},
+{"name": "Rezepte die:","ingredients": "uns gelungen sind\r\nwir öfter kochen wollen\r\nwir im Internet gefunden haben\r\nuns bei Freunden geschmeckt haben\r\nwir vom Urlaub mitgenommen haben\r\nuns aus Kochbüchern und Zeitungen angelacht haben\r\ndurch die reiche Ernte im Garten entstanden sind\r\nmit regionalen Produkten kochbar sind\r\nuns der Kühlschrank vorgegeben hat\r\nwir nicht vergessen wollen\r\nunserer Familie schmecken\r\nkeine Wünsche offen lassen\r\nuns Mama überliefert hat\r\ngesund und günstig sind\r\nabwandelbar sind\r\n\r\n","preparation": "[p]\r\n","tip": "\r\n\r\n","path": "recipe_data\\00 Einleitung\\V und Vm\\foto_c2.jpg"}
+]},
+{
 "name":"Suppen und Eintöpfe",
 "backgroundColor":"#e44f38",
 "recipes": [
